@@ -23,14 +23,14 @@ var limit time.Duration
 var looking bool = false
 
 func main() {
+	c := data.GetConfig()
 	endtime = time.Now()
-	stepsize = 20 * time.Second
-	limit = 1000 * time.Second
+	stepsize = time.Duration(c.Stepsize) * time.Second
+	limit = time.Duration(c.Limit) * time.Second
 
 	r := mux.NewRouter()
-
-	r.HandleFunc("/api/reqmc", postReqMc).Methods("POST")
-	http.ListenAndServe(":8000", r)
+	r.HandleFunc(c.Path, postReqMc).Methods("POST")
+	http.ListenAndServe(c.Port, r)
 }
 
 func postReqMc(w http.ResponseWriter, r *http.Request) {
