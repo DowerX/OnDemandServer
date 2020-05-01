@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os/exec"
 	"time"
 
 	"./data"
@@ -71,20 +72,20 @@ func req(user data.User) {
 	if looking == false {
 		//START
 		fmt.Println("Starting server.")
-		//cmd := exec.Command("systemctl", "start", "papermc-server.service")
-		//cmd.Start()
+		cmd := exec.Command("systemctl", "start", c.Service)
+		cmd.Start()
 		lookForEnd()
 	}
 }
 
 func lookForEnd() {
 	looking = true
-	//cmd := exec.Command("systemctl", "stop", "papermc-server.service")
+	cmd := exec.Command("systemctl", "stop", c.Service)
 	for {
 		if endtime.Sub(time.Now()) <= 0 {
 			//STOP
 			fmt.Println("Stopping server.")
-			//cmd.Start()
+			cmd.Start()
 			looking = false
 			return
 		}

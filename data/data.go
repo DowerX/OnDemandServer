@@ -26,6 +26,7 @@ type Config struct {
 	Limit    int
 	Path     string
 	Port     string
+	Service  string
 }
 
 // GetConfig _

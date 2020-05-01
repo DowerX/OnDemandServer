@@ -2,3 +2,4 @@ stepsize: 120
 limit: 600
 path: /api/reqmc
 port: :8000
+service: papermc-server.service
