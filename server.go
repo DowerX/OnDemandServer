@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -27,7 +28,11 @@ var looking bool = false
 var c data.Config
 
 func main() {
-	c = data.GetConfig()
+	var conf string
+	flag.StringVar(&conf, "config", "./config.yml", "Set the config file.")
+	flag.Parse()
+	c = data.GetConfig(conf)
+	checkFlags()
 	endtime = time.Now()
 	stepsize = time.Duration(c.Stepsize) * time.Second
 	limit = time.Duration(c.Limit) * time.Second
@@ -44,6 +49,19 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc(c.Path, postReq).Methods("POST")
 	http.ListenAndServe(c.Port, r)
+}
+
+func checkFlags() {
+	flag.IntVar(&c.Stepsize, "stepsize", c.Stepsize, "Set stepsize of additions.")
+	flag.IntVar(&c.Limit, "limit", c.Limit, "Set the maximum time for the countdown.")
+	flag.StringVar(&c.Path, "path", c.Path, "Set the routing path for the server.")
+	flag.StringVar(&c.Port, "port", c.Port, "Set the port of the server.")
+	flag.StringVar(&c.StartScript, "start", c.StartScript, "Set the starting script of the service.")
+	flag.StringVar(&c.StopScript, "stop", c.StopScript, "Set the stopping script of the service.")
+	flag.BoolVar(&c.Log, "log", c.Log, "Enable or disbale logging to a file.")
+	flag.StringVar(&c.Logfile, "logfile", c.Logfile, "Set the logfile.")
+	flag.StringVar(&c.Users, "users", c.Users, "Set the user's credentials file.")
+	flag.Parse()
 }
 
 func writelog(l ...interface{}) {
@@ -70,7 +88,7 @@ func postReq(w http.ResponseWriter, r *http.Request) {
 			c := bcrypt.CompareHashAndPassword([]byte(users[i].PasswordHash), []byte(creds.Password))
 			if c == nil {
 				go req(users[i])
-				writelog("INFO: Incoming request: ", creds.Username)
+				writelog("INFO: Incoming request:", creds.Username)
 				w.WriteHeader(http.StatusAccepted)
 				return
 			}
@@ -89,7 +107,7 @@ func req(user data.User) {
 		endtime = endtime.Add(stepsize)
 	}
 
-	writelog("INFO: Added", stepsize, "seconds.", "Service will stop at ", endtime, ".")
+	writelog("INFO: Added", stepsize, ".", "Service will stop at", endtime, ".")
 
 	if looking == false {
 		//START

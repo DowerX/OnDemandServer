@@ -14,9 +14,15 @@ type User struct {
 
 // GetUsers _
 func GetUsers(f string) []User {
-	var data, _ = ioutil.ReadFile(f)
+	var data, err = ioutil.ReadFile(f)
 	users := []User{}
-	_ = yaml.Unmarshal(data, &users)
+	if err != nil {
+		panic(err)
+	}
+	err = yaml.Unmarshal(data, &users)
+	if err != nil {
+		panic(err)
+	}
 	return users
 }
 
@@ -34,9 +40,12 @@ type Config struct {
 }
 
 // GetConfig _
-func GetConfig() Config {
-	var data, _ = ioutil.ReadFile("./config.yml")
+func GetConfig(f string) Config {
+	var data, err = ioutil.ReadFile(f)
 	config := Config{}
-	_ = yaml.Unmarshal(data, &config)
+	err = yaml.Unmarshal(data, &config)
+	if err != nil {
+		panic(err)
+	}
 	return config
 }
