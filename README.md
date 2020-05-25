@@ -3,10 +3,10 @@ Start a service by sending a POST to this server. After the time runs out the se
 
 ## Setup
 ```
-git clone 
+git clone / go get
 go build
 ```
-create data.yml and config.yml
+set up user credentials (data.yml by default) 
 
 ## Usage
 Send POST from your website or with Postman.\
@@ -19,11 +19,16 @@ The body should look like this:
 ```
 
 ## Config
+config > set config file\
 stepsize > time added by one request (in seconds)\
 limit > max time from now to the end (in seconds)\
 path > where to acces the server\
 port > port of the server\
-service > name of the service 
+startscript > path to the startig script\
+stopscript > path to the stopping script\
+log > enable/disable logging to a file\
+logfile > path to the logfile\
+users > path to the users file
 
 ## Data
 Stores user login data
