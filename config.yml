@@ -1,5 +1,9 @@
 stepsize: 120
 limit: 600
-path: /api/reqmc
+path: /api/req
 port: :8000
-service: papermc-server.service
+startscript: ./start.bat
+stopscript: ./stop.bat
+log: true
+logfile: ./log.txt
+users: ./data.yml

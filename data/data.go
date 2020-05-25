@@ -13,8 +13,8 @@ type User struct {
 }
 
 // GetUsers _
-func GetUsers() []User {
-	var data, _ = ioutil.ReadFile("./data.yml")
+func GetUsers(f string) []User {
+	var data, _ = ioutil.ReadFile(f)
 	users := []User{}
 	_ = yaml.Unmarshal(data, &users)
 	return users
@@ -22,11 +22,15 @@ func GetUsers() []User {
 
 // Config _
 type Config struct {
-	Stepsize int
-	Limit    int
-	Path     string
-	Port     string
-	Service  string
+	Stepsize    int
+	Limit       int
+	Path        string
+	Port        string
+	StartScript string
+	StopScript  string
+	Log         bool
+	Logfile     string
+	Users       string
 }
 
 // GetConfig _
